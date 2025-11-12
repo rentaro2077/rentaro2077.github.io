@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Le binaire c'est quoi ?</title>
+    <link rel="stylesheet" href="../.theme/binary.css" />
+    <link rel="stylesheet" href="../.theme/base.css" />
+    <link rel="stylesheet" href="../.theme/back-button.css"/>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container">
+            <h1>Le binaire c'est quoi ?</h1>
+            <p class="lede">Une introduction simple aux notions de binaire, bit et octet.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <article class="card">
+            <section id="binaire">
+                <h2>Le binaire</h2>
+                <p>
+                    Le <strong>binaire</strong> est un système de numération avec deux chiffres
+                    (<code>0</code>, <code>1</code>) [<em>base 2</em>] contrairement au système
+                    décimal [<em>base 10</em>] que nous utilisons habituellement, composé de dix chiffres
+                    (<code>0</code> à <code>9</code>).
+                </p>
+            </section>
+
+            <section id="bit-octet">
+                <h2>Bit et octet</h2>
+                <p>
+                    Le <strong>bit</strong> est la plus petite unité de stockage numérique : il peut
+                    valoir <code>0</code> ou <code>1</code>. Un seul bit suffit pour représenter
+                    un état actif/inactif (vrai/faux), comme une case à cocher. Plusieurs bits
+                    combinés servent à représenter des données plus complexes (texte, images, son, vidéo...).
+                </p>
+
+                <p>
+                    Un <strong>octet</strong> est une unité standard composée de <strong>8 bits</strong>.
+                    Avec 8 bits on peut représenter <strong>256 valeurs différentes</strong> (de
+                    <code>0</code> à <code>255</code>) car il y a <code>2⁸ = 256</code> combinaisons possibles.
+                </p>
+
+                <div class="examples">
+                    <h3>Exemples d'octets</h3>
+                    <pre><code># Plusieurs exemples de conversion binaire -> décimal
+
+00000000 -> 0
+00000001 -> 1
+00000010 -> 2 
+00000111 -> 7
+11111111 -> 255</code></pre>
+                </div>
+
+                <h3>Comment convertir en décimal</h3>
+                <p>
+                    Pour convertir un nombre binaire en décimal, on additionne les puissances de
+                    deux (<code>2ⁿ</code>) correspondant aux bits positionnés à <code>1</code>.
+                </p>
+
+                <ol>
+                    <li>Le premier bit (à droite) vaut <code>2⁰ = 1</code></li>
+                    <li>Le deuxième vaut <code>2¹ = 2</code></li>
+                    <li>Le troisième vaut <code>2² = 4</code></li>
+                    <li>Le quatrième vaut <code>2³ = 8</code></li>
+                    <li>Le cinquième vaut <code>2⁴ = 16</code></li>
+                    <li>Le sixième vaut <code>2⁵ = 32</code></li>
+                    <li>Le septième vaut <code>2⁶ = 64</code></li>
+                    <li>Le huitième (à gauche) vaut <code>2⁷ = 128</code></li>
+                </ol>
+
+                <div class="conversion">
+                    <h3>Exemple</h3>
+                    <p>Pour <code>10111011</code> :</p>
+                    <pre><code>10111011 -> 128 + 32 + 16 + 8 + 2 + 1 = 187</code></pre>
+                </div>
+            </section>
+            <section id="multiple-unit">
+                <h2>Multiples du bit et de l'octet</h2>
+                <h3>Multiples du bit</h3>
+                <h4>Système binaire (IEC)</h4>
+                <pre><code>
+kibibit (Kibit) = 2¹⁰ bits = 1 024 bits
+mebibit (Mibit) = 2²⁰ bits = 1 048 576 bits
+gibibit (Gibit) = 2³⁰ bits = 1 073 741 824 bits
+tebibit (Tibit) = 2⁴⁰ bits = 1 099 511 627 776 bits
+pebibit (Pibit) = 2⁵⁰ bits = 1 125 899 906 842 624 bits
+exbibit (Eibit) = 2⁶⁰ bits = 1 152 921 504 606 846 976 bits
+zebibit (Zibit) = 2⁷⁰ bits = 1 180 591 620 717 411 303 424 bits
+yobibit (Yibit) = 2⁸⁰ bits = 1 208 925 819 614 629 174 706 176 bits
+ronnibit (Ribit) = 2⁹⁰ bits = 1 237 940 039 285 380 274 899 124 224 bits
+quebibit (Qibit) = 2¹⁰⁰ bits = 1 267 650 600 228 229 401 496 703 205 376 bits
+                </code></pre>
+                <h4>Système décimal (SI)</h4>
+                <pre><code>
+kilobit (kbit) = 10³ bits = 1 000 bits
+mégabit (Mbit) = 10⁶ bits = 1 000 000 bits
+gigabit (Gbit) = 10⁹ bits = 1 000 000 000 bits
+térabit (Tbit) = 10¹² bits = 1 000 000 000 000 bits
+pébit (Pbit) = 10¹⁵ bits = 1 000 000 000 000 000 bits
+exabit (Ebit) = 10¹⁸ bits = 1 000 000 000 000 000 000 bits
+zettabit (Zbit) = 10²¹ bits = 1 000 000 000 000 000 000 000 bits
+yottabit (Ybit) = 10²⁴ bits = 1 000 000 000 000 000 000 000 000 bits
+ronnabit (Rbit) = 10²⁷ bits = 1 000 000 000 000 000 000 000 000 000 bits
+quettabit (Qbit) = 10³⁰ bits = 1 000 000 000 000 000 000 000 000 000 000 bits
+                </code></pre>
+                <h3>Multiples de l'octet</h3>
+                <h4>Système binaire (IEC)</h4>
+                <pre><code>
+kibioctet (KiB) = 2¹⁰ octets = 1 024 octets = 8 192 bits
+mébioctet (MiB) = 2²⁰ octets = 1 048 576 octets = 8 388 608 bits
+gibioctet (GiB) = 2³⁰ octets = 1 073 741 824 octets = 8 589 934 592 bits
+tebioctet (TiB) = 2⁴⁰ octets = 1 099 511 627 776 octets = 8 796 093 022 208 bits
+pébioctet (PiB) = 2⁵⁰ octets = 1 125 899 906 842 624 octets = 9 007 199 254 740 992 bits
+exbioctet (EiB) = 2⁶⁰ octets = 1 152 921 504 606 846 976 octets = 9 223 372 036 854 775 808 bits
+zebioctet (ZiB) = 2⁷⁰ octets = 1 180 591 620 717 411 303 424 octets = 9 444 732 965 739 290 427 392 bits
+yobioctet (YiB) = 2⁸⁰ octets = 1 208 925 819 614 629 174 706 176 octets = 9 671 406 556 917 033 397 649 408 bits
+ronnioctet (RiB) = 2⁹⁰ octets = 1 237 940 039 285 380 274 899 124 224 octets = 9 903 520 314 283 041 498 393 793 792 bits
+quebioctet (QiB) = 2¹⁰⁰ octets = 1 267 650 600 228 229 401 496 703 205 376 octets = 10 141 204 801 825 835 211 973 625 642 048 bits
+                </code></pre>
+                <h4>Système décimal (SI)</h4>
+                <pre><code>
+kilooctet (kB) = 10³ octets = 1 000 octets = 8 000 bits
+mégaoctet (MB) = 10⁶ octets = 1 000 000 octets = 8 000 000 bits
+gigaoctet (GB) = 10⁹ octets = 1 000 000 000 octets = 8 000 000 000 bits
+téraoctet (TB) = 10¹² octets = 1 000 000 000 000 octets = 8 000 000 000 000 bits
+pétaoctet (PB) = 10¹⁵ octets = 1 000 000 000 000 000 octets = 8 000 000 000 000 000 bits
+exaoctet (EB) = 10¹⁸ octets = 1 000 000 000 000 000 000 octets = 8 000 000 000 000 000 000 bits
+zettaoctet (ZB) = 10²¹ octets = 1 000 000 000 000 000 000 000 octets = 8 000 000 000 000 000 000 000 bits
+yottaoctet (YB) = 10²⁴ octets = 1 000 000 000 000 000 000 000 000 octets = 8 000 000 000 000 000 000 000 000 bits
+ronnaioctet (RB) = 10²⁷ octets = 1 000 000 000 000 000 000 000 000 000 octets = 8 000 000 000 000 000 000 000 000 000 bits
+quettaoctet (QB) = 10³⁰ octets = 1 000 000 000 000 000 000 000 000 000 000 octets = 8 000 000 000 000 000 000 000 000 000 000 bits
+                </code></pre>
+                <div class="note"><strong>Note: </strong> C'est pour ça que quand vous achetez un disque dur de "1 TB" votre PC détecte 931GB et pas 1TB,car les fabricants de disque et ceux qui font les systèmes d'exploitation n'utilisent pas la même unité.</div>
+            </section>
+
+            <section id="test">
+                <h2>Testez par vous-même</h2>
+                <h3>Convertir un nombre décimal en binaire et savoir quelle est sa représentation minimale (en chiffres)
+                    en binaire</h3>
+                <div class="converter">
+                    <label for="decimalInput">Nombre décimal :</label>
+                    <br>
+                    <input type="number" id="decimalInput" placeholder="ex: 42" min="0">
+                    <button id="convertBtn">Convertir</button>
+                </div>
+                <hr>
+                <div class="result" id="result">
+                    <p>Résultat binaire : <span id="binaryOutput">-</span></p>
+                    <p>Nombre de bits : <span id="bitCount">-</span></p>
+                </div>
+                <div class="note"><strong>Note :</strong>  Un processeur 32 bits peut gérer jusqu'à <strong>4 294 967 296 (2³²)</strong> nombres différents. Pour les entiers signés, la plage va de <strong>-2 147 483 648 (-2³¹)</strong> à <strong>2 147 483 647 (2³¹-1)</strong>.  
+                <br>
+                Pour un processeur 64 bits, il peut gérer jusqu'à <strong>18 446 744 073 709 551 616 (2⁶⁴)</strong> nombres différents. Pour les entiers signés, la plage va de <strong>-9 223 372 036 854 775 808 (-2⁶³)</strong> à <strong>9 223 372 036 854 775 807 (2⁶³-1)</strong>.</div>
+
+                <h3>Transformez trois nombres décimaux en couleur (RGB)</h3>
+                <div class="rgb-converter">
+                    <div class="rgb-inputs">
+                        <div class="input-group">
+                            <label for="rValue">Rouge (R) :</label>
+                            <input type="number" id="rValue" min="0" max="255" placeholder="0-255">
+                        </div>
+                        <div class="input-group">
+                            <label for="gValue">Vert (G) :</label>
+                            <input type="number" id="gValue" min="0" max="255" placeholder="0-255">
+                        </div>
+                        <div class="input-group">
+                            <label for="bValue">Bleu (B) :</label>
+                            <input type="number" id="bValue" min="0" max="255" placeholder="0-255">
+                        </div>
+                        <button id="showColorBtn">Afficher la couleur</button>
+                    </div>
+
+                    <div class="color-display">
+                        <div id="colorPixel" class="pixel"></div>
+                        <div id="color-text">
+                            <p id="colorCode">Code RGB : <span>-</span></p>
+                            <p id="colorCodeHexa">Code hexadécimal : <span>-</span></p>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="note"><strong>Note : </strong>Un pixel est composé de trois octets : un pour le rouge, un pour le vert et un pour le bleu. Plusieurs de ces pixels forment des images, mais cela peut rapidement devenir très lourd en termes de taille. C'est pourquoi on utilise souvent des méthodes de compression comme le ".png" (sans perte) et le ".jpeg" (avec perte), à l'exception du format bitmap ".bmp" et d'autres formats (qui eux pèsent une tonne). Pour les vidéos, on utilise d'autres méthodes de compression qui tiennent compte des images précédentes et suivantes et bien plus encore.</div>
+            </section>
+            <button onclick="location.href='../../hub.html'" class="back-button">Retour au portail</button>
+        </article>
+    </main>
+</body>
+<script src="../.js/decimalToBinary.js"></script>
+<script src="../.js/color.js"></script>
+</html>

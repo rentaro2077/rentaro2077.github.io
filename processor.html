@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Processeur</title>
+    <link rel="stylesheet" href="../.theme/cpu.css" />
+    <link rel="stylesheet" href="../.theme/base.css" />
+    <link rel="stylesheet" href="../.theme/back-button.css" />
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container">
+            <h1>Processeur</h1>
+            <p class="lede">Définition, fabrication, architecture, caches, jeux d'instructions.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <article class="card">
+
+            <section id="definition">
+                <h2>Définition</h2>
+                <p>
+                    Un processeur, plus couramment appelé <em>CPU</em> (de l’anglais <strong>Central Processing
+                        Unit</strong>), est un composant essentiel de l’électronique qui exécute des calculs et
+                    orchestre les opérations d’un système informatique. Dans l’informatique moderne on parle souvent de
+                    <strong>microprocesseur</strong> lorsqu’il s’agit d’un CPU intégré sur une seule puce de silicium.
+                </p>
+                <div class="note">
+                    <strong>Note :</strong> Dans le langage courant on confond parfois <em>CPU</em> et <em>SoC</em>
+                    (System on Chip). Un SoC contient souvent le CPU, un GPU, des contrôleurs mémoire, et d'autres blocs
+                    sur la même puce — utile pour les appareils mobiles.
+                </div>
+            </section>
+
+            <section id="fabrication">
+                <h2>Fabrication</h2>
+
+                <h3>Conception (design)</h3>
+                <p>
+                    Des équipes d’ingénieurs conçoivent l’architecture du CPU (ex. x86, ARM, RISC-V), définissent les
+                    unités de calcul (ALU, FPU), les unités de gestion de la mémoire, les caches, les pipelines, et la
+                    logique de contrôle. Ces descriptions sont réalisées avec des langages spécialisés de description
+                    matérielle (<em>HDL</em>) comme <strong>VHDL</strong> ou <strong>Verilog</strong>. À partir de cette
+                    spécification, on produit une maquette logique, des simulations, puis des masques pour la
+                    fabrication.
+                </p>
+
+                <h3>Fabrication du wafer (tranche de silicium)</h3>
+                <p>
+                    La fabrication commence par l’obtention de silicium de haute pureté, transformé en lingot
+                    monocristallin, puis découpé en fines tranches appelées <strong>wafers</strong>. Ces wafers
+                    constituent le support sur lequel seront gravées les structures du processeur.
+                </p>
+
+                <h3>Photolithographie (l'impression sur le wafer)</h3>
+                <p>
+                    Des couches de matériau photosensible (résist) sont déposées, puis exposées à la lumière via des
+                    masques. Les technologies de lithographie (DUV, EUV, etc.) permettent de graver des motifs
+                    extrêmement fins pour créer transistors et interconnexions. Le processus se répète couche par
+                    couche.
+                </p>
+
+                <h3>Empilement des couches (comme un sandwich)</h3>
+                <p>
+                    Le CPU est formé d’un empilement complexe : transistors, oxydes isolants, couches métalliques pour
+                    les interconnexions, vias, etc. Chaque couche subit gravure, dopage, dépôt et nettoyage avant la
+                    suivante, jusqu’à obtenir un réseau de milliards de transistors interconnectés.
+                </p>
+
+                <h3>Découpe et phases de test</h3>
+                <p>
+                    Le wafer contient des centaines (voire milliers) de <strong>dies</strong> (puces). Après
+                    fabrication, on découpe le wafer, on teste chaque die : ceux présentant des défauts sont rejetés;
+                    les dies valides passent aux étapes suivantes (packaging, tests fonctionnels et de fiabilité).
+                </p>
+
+                <h3>Packaging et binning</h3>
+                <p>
+                    Chaque die valide est encapsulé dans un <strong>package</strong> qui facilite la connexion
+                    électrique et mécanique au système (socket, soudure, etc.). Le <strong>binning</strong> consiste à
+                    mesurer les performances (fréquence stable, consommation, chauffe) et à classer les puces : celles
+                    qui supportent de plus hautes fréquences et ont de meilleures caractéristiques thermiques sont
+                    commercialisées comme modèles haut de gamme ; d’autres, avec certains cœurs désactivés ou des
+                    fréquences réduites, sont vendues en gamme inférieure.
+                </p>
+
+                <div class="note">
+                    <strong>Note :</strong> Le binning permet aux fabricants de maximiser le rendement — une même
+                    tranche peut donner plusieurs produits (performances et prix différents) sans gaspiller tout le die
+                    qui fonctionne partiellement.
+                </div>
+            </section>
+
+            <section id="packages">
+                <h2>Types de packages (sockets)</h2>
+
+                <ul>
+                    <li>
+                        <strong>PGA (Pin Grid Array)</strong>
+                        <ul>
+                            <li>Le package possède des <strong>broches</strong> métalliques (pins).</li>
+                            <li>Exemple historique : certains CPU AMD (AM4 anciennement).</li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <strong>LGA (Land Grid Array)</strong>
+                        <ul>
+                            <li>Le package a des <strong>contacts plats</strong> ; les broches se trouvent sur la carte
+                                mère.</li>
+                            <li>Exemple : familles Intel Core récentes, AMD AM5.</li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <strong>BGA (Ball Grid Array)</strong>
+                        <ul>
+                            <li>Le die est soudé via des <strong>billes de soudure</strong> directement sur la carte
+                                (non remplaçable).</li>
+                            <li>Exemple : SoC de smartphones, CPU intégrés dans ultrabooks.</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="note">
+                    <strong>Note :</strong> Les CPU BGA sont souvent non-upgradables (fixés à la carte) — important à
+                    considérer pour les portables.
+                </div>
+            </section>
+
+            <section id="cache">
+                <h2>Cache</h2>
+
+                <p>
+                    Le cache est une mémoire <strong>volatile</strong> de type <strong>SRAM</strong> intégrée au
+                    processeur. Elle sert d’intermédiaire rapide entre le CPU et la mémoire principale (DRAM). Les
+                    niveaux courants :
+                </p>
+
+                <ul>
+                    <li><strong>L1</strong> : très petit, très rapide, souvent séparé L1I (instructions) et L1D
+                        (données), privé par cœur.</li>
+                    <li><strong>L2</strong> : plus grand que L1, parfois privé par cœur ou partagé entre quelques cœurs.
+                    </li>
+                    <li><strong>L3</strong> : typiquement partagé entre tous les cœurs, taille importante pour réduire
+                        les accès à la RAM.</li>
+                    <li><strong>L4</strong> : plus rare, souvent en <strong>eDRAM</strong>, partagé et utilisé comme
+                        gros tampon entre L3 et la RAM principale.</li>
+                </ul>
+
+                <p><strong>Remarque</strong> : si une donnée n’est pas trouvée dans le cache, le parcours est
+                    typiquement <code>RAM → (L4) → L3 → L2 → L1 → CPU</code>.</p>
+
+                <h3>Résumé</h3>
+
+                <h4><strong>L1</strong></h4>
+                <ul>
+                    <li><strong>Type de mémoire</strong> : SRAM</li>
+                    <li><strong>Organisation</strong> : séparé en <strong>L1I</strong> (instructions) et
+                        <strong>L1D</strong> (données)</li>
+                    <li><strong>Localisation</strong> : <strong>toujours privé</strong> à chaque cœur</li>
+                    <li><strong>Rôle</strong> : fournir le plus rapidement possible les instructions et données
+                        immédiatement nécessaires au processeur</li>
+                    <li><strong>Taille typique</strong> : 2 Ko à 128 Ko par cœur (souvent 32K I + 32K D)</li>
+                    <li><strong>Latence</strong> : ~1 à 3 cycles d’horloge</li>
+                </ul>
+
+                <hr>
+
+                <h4><strong>L2</strong></h4>
+                <ul>
+                    <li><strong>Type de mémoire</strong> : SRAM</li>
+                    <li><strong>Organisation</strong> : généralement <strong>privé à chaque cœur</strong>, parfois
+                        partagé entre 2 cœurs</li>
+                    <li><strong>Rôle</strong> : stocker plus de données/instructions récentes que le L1, mais un peu
+                        moins rapide</li>
+                    <li><strong>Taille typique</strong> : 128 Ko à 2 Mo par cœur (256–512 Ko fréquent)</li>
+                    <li><strong>Latence</strong> : ~3 à 12 cycles d’horloge</li>
+                </ul>
+
+                <hr>
+
+                <h4><strong>L3</strong></h4>
+                <ul>
+                    <li><strong>Type de mémoire</strong> : SRAM</li>
+                    <li><strong>Organisation</strong> : en général <strong>partagé entre tous les cœurs</strong> du
+                        processeur</li>
+                    <li><strong>Rôle</strong> : éviter de devoir aller chercher en RAM, sert aussi de zone commune
+                        d’échange de données entre les cœurs</li>
+                    <li><strong>Taille typique</strong> : 2 Mo à 64 Mo selon CPU (souvent 8–32 Mo)</li>
+                    <li><strong>Latence</strong> : ~30 à 50 cycles d’horloge</li>
+                </ul>
+
+                <hr>
+
+                <h4><strong>L4</strong> (plus rare)</h4>
+                <ul>
+                    <li><strong>Type de mémoire</strong> : eDRAM (embedded DRAM)</li>
+                    <li><strong>Organisation</strong> : <strong>partagé entre tous les cœurs</strong> (et parfois GPU
+                        intégré)</li>
+                    <li><strong>Rôle</strong> : gros tampon entre L3 et RAM principale, compromis entre vitesse et
+                        capacité</li>
+                    <li><strong>Taille typique</strong> : 64 Mo à 128 Mo (selon architecture)</li>
+                    <li><strong>Latence</strong> : ~50 à 100 cycles (plus rapide que la RAM, mais plus lent que L3)</li>
+                </ul>
+
+                <div class="note">
+                    <strong>Note :</strong> Certains designs modernes utilisent des caches non conventionnels (ex.
+                    segments dédiés pour GPU ou caches distribués). La hiérarchie cache varie fortement selon l'usage
+                    ciblé (mobile vs serveur).
+                </div>
+            </section>
+
+            <section id="core">
+                <h2>Cœur (core)</h2>
+                <p>
+                    Un <strong>cœur</strong> est l’unité de calcul indépendante capable d’exécuter des instructions. Un
+                    CPU moderne contient plusieurs cœurs (multicœur), chacun avec ses propres pipelines, registres et
+                    généralement son L1/L2.
+                </p>
+
+                <h3>Multithreading (SMT / Hyper-Threading)</h3>
+                <p>
+                    Le multithreading simultané (SMT, ex. Intel Hyper-Threading) permet à un cœur physique d’exposer
+                    plusieurs cœurs logiques au système d’exploitation. L’idée est d’utiliser les ressources inactives
+                    du cœur (unités d’exécution, caches) pour exécuter un autre thread et augmenter l’occupation du
+                    pipeline, améliorant le rendement sur charges parallèles et mixtes.
+                </p>
+
+                <div class="note">
+                    <strong>Note :</strong> SMT n'augmente pas toujours les performances linéairement — pour certaines
+                    charges à forte consommation mémoire, l'apport peut être limité.
+                </div>
+            </section>
+
+            <section id="virtualisation">
+                <h2>Technologie de virtualisation</h2>
+                <p>
+                    La virtualisation permet d’exécuter des systèmes invités isolés sur un même matériel.
+                </p>
+
+                <ul>
+                    <li>Les CPU modernes intègrent des extensions de virtualisation (ex. <strong>Intel
+                            VT-x/VT-d</strong>, <strong>AMD-V/IOMMU</strong>) qui facilitent la création de machines
+                        virtuelles et l’isolation.</li>
+                    <li><strong>IOMMU / PCIe passthrough</strong> : permet d’assigner directement un périphérique PCIe
+                        (GPU, contrôleur réseau, etc.) à une machine virtuelle — utile pour la virtualisation haute
+                        performance.</li>
+                    <li><strong>Hyperviseur</strong> : logiciel qui gère les machines virtuelles. Types :
+                        <ul>
+                            <li><strong>Type 1 (bare-metal)</strong> : s’exécute directement sur le matériel (ex. Xen,
+                                ESXi).</li>
+                            <li><strong>Type 2</strong> : s’exécute au-dessus d’un OS hôte (ex. VirtualBox, VMware
+                                Workstation).</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="note">
+                    <strong>Note :</strong> La virtualisation matérielle moderne permet aussi des fonctions de sécurité
+                    (ex. enclaves), mais introduit parfois des contraintes pour le passthrough (IOMMU groups, SR-IOV,
+                    etc.).
+                </div>
+            </section>
+
+            <section id="pcie-passthrough">
+                <h2>PCIe passthrough</h2>
+                <p>
+                    Le <strong>PCIe passthrough</strong> (ou device passthrough) permet de donner le contrôle exclusif
+                    d’un périphérique PCIe (ex. GPU) à une VM via IOMMU/VT-d. Avantages : performances proches du natif
+                    ; inconvénients : complexité de configuration, contraintes de sécurité et compatibilité.
+                </p>
+
+                <div class="note">
+                    <strong>Note :</strong> Pour configurer le passthrough il faut souvent vérifier la compatibilité de
+                    la carte mère, des BIOS/UEFI, et du périphérique (certains GPU grand public limitent ou compliquent
+                    le passthrough).
+                </div>
+            </section>
+
+            <section id="isa">
+                <h2>Jeux d'instructions (ISA)</h2>
+                <p>
+                    Le <strong>jeu d’instructions</strong> (Instruction Set Architecture, ISA) définit le langage
+                    machine d’un CPU : types d’opérations, registres, modes d’adressage.
+                </p>
+
+                <ul>
+                    <li><strong>x86 / x86-64 (AMD64)</strong> : ISA CISC dominante sur PC/serveurs.</li>
+                    <li><strong>ARM / AArch64</strong> : ISA RISC très répandue dans les mobiles et de plus en plus sur
+                        serveurs/PC.</li>
+                    <li><strong>RISC-V</strong> : ISA open-source en croissance.</li>
+                    <li>Extensions courantes : SIMD (SSE, AVX), cryptographie, virtualisation, sécurité matérielle.</li>
+                </ul>
+
+                <h3>Comparaison des jeux d'instructions</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Critère</th>
+                            <th>RISC (ex. ARM, RISC-V)</th>
+                            <th>CISC (ex. x86/x86-64)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Nombre d'instructions</strong></td>
+                            <td>Relativement peu, simples</td>
+                            <td>Très élevé, instructions complexes</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Longueur des instructions</strong></td>
+                            <td>Fixe ou quasi-fixe, généralement 32 bits</td>
+                            <td>Variable, souvent 1 à 15 octets</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Exécution</strong></td>
+                            <td>1 instruction ≈ 1 cycle, pipeline simple et efficace</td>
+                            <td>Instructions complexes peuvent prendre plusieurs cycles</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Décodage</strong></td>
+                            <td>Facile à décoder, circuits simples</td>
+                            <td>Décodage plus complexe pour transformer en micro-opérations</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Exemple d'usage</strong></td>
+                            <td>Smartphones, tablettes, systèmes embarqués, serveurs RISC</td>
+                            <td>PC, serveurs traditionnels, compatibilité legacy x86</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Avantage principal</strong></td>
+                            <td>Efficacité énergétique, simplicité du pipeline</td>
+                            <td>Compatibilité étendue, riche ensemble d'instructions</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inconvénient</strong></td>
+                            <td>Code plus long pour certaines opérations complexes</td>
+                            <td>Consommation plus élevée, pipeline et décodage plus complexes</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p><strong>Résumé :</strong></p>
+                <p class="small">
+                    <strong>RISC</strong> privilégie la simplicité et la rapidité d’exécution par instruction, ce qui
+                    facilite le multi-cœur et l’efficacité énergétique.
+                    <br>
+                    <strong>CISC</strong> privilégie la richesse et la compatibilité, permettant d’exécuter des tâches
+                    complexes en moins d’instructions, mais avec un pipeline et un décodage plus complexes.
+                </p>
+
+                <div class="note">
+                    <strong>Note :</strong> Dans la pratique moderne, la frontière RISC/CISC est floue : les
+                    implémentations x86 décomposent souvent les instructions CISC en micro-opérations RISC-like internes
+                    pour l'exécution, tandis que les architectures RISC ajoutent des extensions (SIMD, vecteurs,
+                    prédiction, etc.) qui complexifient l'implémentation.
+                </div>
+            </section>
+
+            <section id="frequency">
+                <h2>Fréquence d'horloge</h2>
+
+                <h3>Fréquence d'horloge de base</h3>
+                <p>
+                    La fréquence de base (base clock) correspond à la vitesse nominale à laquelle un cœur peut exécuter
+                    des cycles d’horloge. Elle est donnée en GHz.
+                </p>
+
+                <h3>Fréquence turbo (boost)</h3>
+                <p>
+                    La fréquence turbo (ou boost) est une fréquence supérieure atteinte temporairement quand les
+                    conditions thermiques et de consommation le permettent (moins de cœurs actifs, TDP disponible). Elle
+                    est gérée par la microarchitecture et le firmware.
+                </p>
+
+                <h3>P-states / C-states</h3>
+                <ul>
+                    <li><strong>P-states</strong> (Performance states) : niveaux de performance/consommation. Un P-state
+                        élevé → fréquence/voltage plus hauts ; P-state bas → économie d’énergie.</li>
+                    <li><strong>C-states</strong> (idle states) : états de repos où des parties du CPU sont arrêtées
+                        pour réduire la consommation (C0 = actif, C1..Cn = différents niveaux d’hibernation).</li>
+                </ul>
+
+                <div class="note">
+                    <strong>Note :</strong> Pour l'overclocking ou l'optimisation basse consommation, la gestion fine
+                    des P-states et C-states est cruciale — un réglage mal choisi peut augmenter la latence
+                    d'entrées/sorties ou nuire à la stabilité.
+                </div>
+            </section>
+
+            <section id="igpu">
+                <h2>iGPU (graphics intégré)</h2>
+                <p>
+                    Certains CPU incluent un GPU intégré (iGPU) pour le rendu graphique de base, l’accélération vidéo et
+                    parfois le calcul parallèle. L’iGPU partage souvent la mémoire système ou possède son propre
+                    cache/DRAM embarquée (ex. eDRAM).
+                </p>
+
+                <div class="note">
+                    <strong>Note :</strong> Les iGPU modernes (ex : ARM Mali, Intel Xe-LPG) peuvent suffire pour la
+                    bureautique, la vidéo et certains jeux légers, mais pour le rendu 3D avancé ou le ML on préfère un
+                    GPU discret.
+                </div>
+            </section>
+
+            <section id="pcie">
+                <h2>Lignes PCI (PCIe lanes)</h2>
+                <p>
+                    Les lignes PCIe (lanes) déterminent la bande passante disponible pour les périphériques (GPU, NVMe,
+                    réseaux). Un lien PCIe ×16 offre beaucoup plus de bande passante qu’un lien ×4. Le nombre de lanes
+                    disponibles dépend du CPU et du chipset de la carte mère.
+                </p>
+
+                <div class="note">
+                    <strong>Note :</strong> Sur certaines plateformes, le CPU fournit un nombre limité de lanes ; le
+                    chipset apporte des lanes supplémentaires mais parfois bridées (plus de latence ou moins de bande
+                    passante effective).
+                </div>
+            </section>
+
+            <section id="temperature">
+                <h2>Capteur de température et T_JUNCTION</h2>
+                <p>
+                    Les CPU intègrent des capteurs thermiques pour mesurer la température interne.
+                    <strong>Tjunction</strong> (ou Tjmax) est la température maximale autorisée au niveau des jonctions
+                    ; au-delà, le CPU diminue sa fréquence (thermal throttling) ou s’éteint pour se protéger. Les
+                    systèmes exposent aussi des températures proches du core (per-core) et des zones package.
+                </p>
+
+                <div class="note">
+                    <strong>Note :</strong> Les valeurs Tjmax varient selon le modèle — vérifier la documentation du
+                    fabricant pour connaître les seuils exacts et éviter la surchauffe lors d'overclocking.
+                </div>
+            </section>
+
+            <section id="relations">
+                <h2>Le CPU et ses relations</h2>
+                <p>
+                    Le CPU ne fonctionne pas seul ; il interagit avec plusieurs composants :
+                </p>
+
+                <ul>
+                    <li><strong>Carte mère / Chipset</strong> : gère l’alimentation, la distribution des lanes PCIe, les
+                        contrôleurs I/O, le BIOS/UEFI.</li>
+                    <li><strong>Mémoire RAM</strong> : le CPU accède à la RAM via le contrôleur mémoire (intégré sur le
+                        CPU pour la plupart des architectures modernes).</li>
+                    <li><strong>Stockage</strong> : NVMe/SSD connectés en PCIe ou via contrôleurs SATA, impactent les
+                        temps d’accès globaux.</li>
+                    <li><strong>GPU(s)</strong> : iGPU ou GPU discret ; la répartition du travail entre CPU et GPU
+                        dépend des tâches (graphisme, compute).</li>
+                    <li><strong>Alimentation & VRM</strong> : la qualité de l’étage d’alimentation (VRM) sur la carte
+                        mère influence la stabilité et l’overclocking.</li>
+                    <li><strong>Système de refroidissement</strong> : refroidissement par air, liquide, ou solutions
+                        passives influent sur la capacité du CPU à maintenir des fréquences élevées.</li>
+                    <li><strong>Périphériques I/O</strong> : réseau, USB, audio — communiquent via le chipset / PCIe.
+                    </li>
+                </ul>
+
+                <div class="note">
+                    <strong>Note :</strong> Un bon équilibre entre CPU, RAM, stockage et GPU est essentiel :
+                    surdimensionner uniquement le CPU n'apporte pas toujours un gain si la mémoire ou le stockage
+                    restent des goulots d'étranglement.
+                </div>
+            </section>
+
+            <section id="microarch">
+                <h2>Microarchitecture (aperçu)</h2>
+                <p>
+                    La microarchitecture décrit l’implémentation physique d’un ISA : pipeline (stades d’exécution),
+                    exécution out-of-order, prédiction de branchement, files d’attente, unités SIMD, etc. Des
+                    améliorations microarchitecturales (meilleure prédiction, caches, largeur d’exécution) augmentent
+                    les performances à fréquence donnée.
+                </p>
+
+                <div class="note">
+                    <strong>Note :</strong> Dans la comparaison de CPU, deux modèles à même fréquence peuvent diverger
+                    fortement en performance à cause d'une microarchitecture différente (IPC).
+                </div>
+            </section>
+
+            <section id="security">
+                <h2>Sécurité matérielle</h2>
+                <p>
+                    Les CPU intègrent des mécanismes de sécurité : exécution protégée, espaces isolés, extensions pour
+                    la gestion sécurisée des clés, mitigation matérielle contre certaines vulnérabilités (ex.
+                    speculative execution). Des technologies comme Secure Boot et enclaves (ex. Intel SGX) ajoutent des
+                    niveaux d’isolation.
+                </p>
+
+                <div class="note">
+                    <strong>Note :</strong> Les mitigations logicielles de vulnérabilités matérielles (Spectre/Meltdown,
+                    etc.) peuvent impacter les performances ; il faut mesurer l'effet sur les charges réelles.
+                </div>
+            </section>
+
+            <section id="performance">
+                <h2>Performances et métriques</h2>
+                <ul>
+                    <li><strong>IPC (Instructions Per Cycle)</strong> : nombre d’instructions exécutées en moyenne par
+                        cycle ; dépend de la microarchitecture.</li>
+                    <li><strong>Fréquence</strong> : cycles par seconde (GHz).</li>
+                    <li><strong>Threads / Cœurs</strong> : parallélisme matériel.</li>
+                    <li><strong>Bande passante mémoire / latence</strong> : impacte fortement certaines charges (ex.
+                        bases de données).</li>
+                    <li><strong>TDP (Thermal Design Power)</strong> : indicateur de dissipation thermique nominale
+                        utilisé pour dimensionner le refroidissement.</li>
+                </ul>
+
+                <div class="note">
+                    <strong>Note :</strong> Les benchs synthétiques n’expliquent pas toujours le ressenti en application
+                    réelle — privilégier des tests proches de votre usage (compilation, rendu, jeux, bases de
+                    données...).
+                </div>
+            </section>
+
+            <section id="overclocking">
+                <h2>Overclocking et Undervolting</h2>
+                <p>
+                    <strong>Overclocking</strong> : augmenter fréquence/voltage au-delà des valeurs nominales pour plus
+                    de performances ; risque accru de chauffe et d’usure si mal fait.
+                    <br>
+                    <strong>Undervolting</strong> : réduire le voltage pour diminuer consommation et chauffe tout en
+                    maintenant une fréquence stable — souvent bénéfique pour l’autonomie et la longévité.
+                </p>
+
+                <div class="note">
+                    <strong>Note :</strong> Sauvegardez toujours vos paramètres et testez la stabilité (stress tests,
+                    burn-in) après modification ; un mauvais réglage peut corrompre les données ou endommager le
+                    matériel.
+                </div>
+            </section>
+            <section id="big-little">
+                <h2>Architecture big.LITTLE</h2>
+                <p>
+                    L’architecture <strong>big.LITTLE</strong> est une approche utilisée par ARM pour combiner deux
+                    types de cœurs dans un même processeur :
+                </p>
+                <ul>
+                    <li><strong>Cœurs "big"</strong> : puissants, haute performance, utilisés pour les tâches exigeantes
+                        (jeux, compilation, calcul intensif).</li>
+                    <li><strong>Cœurs "LITTLE"</strong> : économes en énergie, moins puissants, utilisés pour les tâches
+                        légères ou en veille afin de réduire la consommation.</li>
+                </ul>
+                <p>
+                    Le système peut migrer dynamiquement les threads entre les cœurs "big" et "LITTLE" selon la charge
+                    et les besoins énergétiques, optimisant ainsi le compromis performance/consommation.
+                </p>
+                <div class="note">
+                    <strong>Note :</strong> Cette architecture est particulièrement utile dans les smartphones,
+                    tablettes et certains serveurs ARM où la consommation d’énergie est critique. La gestion des
+                    migrations peut se faire via le scheduler du noyau Linux ou via du firmware propriétaire.
+                </div>
+                <div class="note">
+                    <strong>Note technique :</strong> Les cœurs "big" ont souvent un IPC plus élevé et une fréquence
+                    plus haute, tandis que les cœurs "LITTLE" privilégient l’efficacité énergétique. Certaines
+                    implémentations récentes permettent aussi un fonctionnement simultané de tous les cœurs (dynamique
+                    multi-cluster).
+                </div>
+                <div class="note">
+                    <strong>Note avancée :</strong> Certains processeurs modernes utilisent <strong>trois types de
+                        cœurs</strong> :
+                    <em>big, medium et LITTLE</em> pour encore mieux équilibrer performance et consommation. Exemple :
+                    certains SoC ARM comme les Snapdragon 8s Gen 4 ou MediaTek Dimensity 9500.
+                </div>
+            </section>
+
+
+            <section id="choisir">
+                <h2>Choisir un CPU : points à considérer</h2>
+                <ul>
+                    <li>Usage : bureautique, gaming, création de contenu, serveurs, embarqué.</li>
+                    <li>Nombre de cœurs / threads et IPC : importants pour charges parallèles et multitâche.</li>
+                    <li>Fréquence et capacités turbo : utiles pour charges à thread unique.</li>
+                    <li>Compatibilité (socket, chipset).</li>
+                    <li>Support de mémoire (type, fréquence) et nombre de lignes PCIe.</li>
+                    <li>TDP et exigences de refroidissement.</li>
+                    <li>Budget et rapport performance/prix.</li>
+                    <li>Fonctionnalités supplémentaires : virtualisation, sécurité matérielle, support ECC, iGPU.</li>
+                </ul>
+
+                <div class="note">
+                    <strong>Note :</strong> Pour les usages professionnels (serveurs, calcul intensif), vérifiez le
+                    support ECC et la stabilité en charge prolongée ; pour le gaming, privilégiez fréquences élevées et
+                    faible latence mémoire.
+                </div>
+            </section>
+
+            <section id="glossaire">
+    <h2>Glossaire</h2>
+    <ul>
+        <li><strong>CPU (Central Processing Unit)</strong> : processeur central de l’ordinateur, qui exécute les instructions des programmes.</li>
+        <li><strong>GPU (Graphics Processing Unit)</strong> : processeur spécialisé dans le calcul parallèle, utilisé pour le rendu graphique et les calculs massifs.</li>
+        <li><strong>NPU / TPU</strong> : unités spécialisées dans le traitement de réseaux neuronaux (IA, Machine Learning).</li>
+        <li><strong>Wafer</strong> : fine tranche de silicium sur laquelle sont gravés les circuits de plusieurs processeurs avant découpe.</li>
+        <li><strong>Die</strong> : petite puce individuelle découpée d’un wafer contenant le CPU ou SoC.</li>
+        <li><strong>SoC (System on Chip)</strong> : circuit intégrant CPU, GPU, NPU, contrôleurs et mémoire dans une seule puce (ex : processeurs de smartphone).</li>
+        <li><strong>SRAM / DRAM / eDRAM</strong> : types de mémoire ; la <em>SRAM</em> est rapide (cache), la <em>DRAM</em> est la mémoire principale, et l’<em>eDRAM</em> est une DRAM intégrée au processeur.</li>
+        <li><strong>Photolithographie</strong> : procédé optique de gravure des motifs du processeur sur le silicium à l’aide de lumière UV.</li>
+        <li><strong>Transistor</strong> : élément électronique de base servant d’interrupteur logique. Les CPU modernes en contiennent des milliards.</li>
+        <li><strong>Cache</strong> : mémoire ultra-rapide intégrée au CPU pour stocker temporairement les données fréquemment utilisées (L1, L2, L3, L4).</li>
+        <li><strong>ISA (Instruction Set Architecture)</strong> : jeu d’instructions que le processeur peut comprendre (ex : x86, ARM, RISC-V).</li>
+        <li><strong>RISC / CISC</strong> : types d’architectures d’instruction. <em>RISC</em> = instructions simples et rapides (ARM), <em>CISC</em> = instructions plus complexes (x86).</li>
+        <li><strong>Core (Cœur)</strong> : unité de calcul indépendante à l’intérieur d’un processeur multicœur.</li>
+        <li><strong>Thread</strong> : fil d’exécution léger ; un cœur peut gérer plusieurs threads via des technologies comme l’Hyper-Threading (Intel) ou SMT (AMD).</li>
+        <li><strong>Socket</strong> : connecteur physique sur la carte mère dans lequel le processeur est installé (ex : LGA1700, AM5).</li>
+        <li><strong>IPC (Instructions Per Cycle)</strong> : nombre d’instructions exécutées par cycle d’horloge. Indique l’efficacité d’un cœur.</li>
+        <li><strong>Hz / GHz</strong> : unité de fréquence exprimant le nombre de cycles d’horloge par seconde. 1 GHz = 1 milliard de cycles/s.</li>
+        <li><strong>P-states / C-states</strong> : états de gestion d’énergie ; les P-states ajustent la fréquence et la tension, les C-states contrôlent la mise en veille des cœurs.</li>
+        <li><strong>TDP (Thermal Design Power)</strong> : puissance thermique maximale que le système de refroidissement doit dissiper.</li>
+        <li><strong>Tjunction (T<sub>J</sub>)</strong> : température maximale du silicium avant réduction automatique des performances (throttling).</li>
+        <li><strong>Pipeline</strong> : série d’étapes internes pour traiter les instructions (fetch, decode, execute, write-back...).</li>
+        <li><strong>Cache Hit / Miss</strong> : un "hit" signifie que la donnée est trouvée dans le cache, un "miss" qu’il faut la chercher en mémoire plus lente.</li>
+        <li><strong>Overclocking</strong> : augmentation manuelle de la fréquence du CPU pour gagner en performance au détriment de la chaleur et de la stabilité.</li>
+        <li><strong>Undervolting / Underclocking</strong> : réduction de la tension ou fréquence pour améliorer l’efficacité énergétique et réduire la chaleur.</li>
+        <li><strong>Die Shrink</strong> : réduction de la taille des transistors (ex : passage de 14 nm à 7 nm), augmentant la densité et l’efficacité.</li>
+        <li><strong>big.LITTLE</strong> : architecture mélangeant des cœurs puissants ("big") et économes ("LITTLE") pour équilibrer performance et autonomie.</li>
+        <li><strong>Tri-cluster (big/medium/LITTLE)</strong> : évolution du big.LITTLE avec trois types de cœurs — puissants, moyens et économes — pour encore mieux gérer les charges variables. Exemple : <em>Snapdragon 8 Gen 1, MediaTek Dimensity 9500</em>.</li>
+        <li><strong>IOMMU (Input/Output Memory Management Unit)</strong> : unité qui gère et isole les accès mémoire des périphériques, essentielle pour la virtualisation et le PCIe passthrough.</li>
+        <li><strong>PCIe (Peripheral Component Interconnect Express)</strong> : interface haute vitesse reliant CPU, GPU, SSD et autres périphériques.</li>
+        <li><strong>Hyperviseur</strong> : logiciel ou couche matérielle permettant d’exécuter plusieurs systèmes d’exploitation isolés sur la même machine (virtualisation).</li>
+        <li><strong>Binning</strong> : tri des puces selon leurs performances thermiques et électriques après fabrication (les meilleures deviennent les modèles haut de gamme).</li>
+        <li><strong>Package</strong> : boîtier du processeur assurant la connexion électrique entre le die et le socket de la carte mère.</li>
+    </ul>
+    <p><strong>Note :</strong> Comprendre ces termes permet de mieux interpréter les fiches techniques et les performances des CPU modernes, qu’ils soient destinés aux PC, serveurs ou appareils mobiles.</p>
+</section>
+
+            <button onclick="location.href='../../hub.html'" class="back-button">Retour au portail</button>
+        </article>
+    </main>
+</body>
+
+</html>

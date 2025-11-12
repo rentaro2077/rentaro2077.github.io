@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Portail</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href=".resc/.theme/hub.css"/>
+
+</head>
+<header>
+<h1>Salut ! Veuillez appuyer sur <kbd onclick="toggleFullScreen()">F11</kbd> pour le plein écran</h1>
+<h2><span id="hour"></span></h2>
+</header>
+<body>
+<div class="flex-container">
+    <a href=".resc/.html/binary.html">Le binaire c'est quoi ?</a>
+    <a href=".resc/.html/processor.html">Processeur</a>
+    <a href=".resc/.html/sources.html">Sources</a>
+</div>
+</body>
+</html>
+<script src=".resc/.js/time.js"></script>
+<script>
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  </script>
